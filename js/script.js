@@ -1,5 +1,6 @@
 const selectedByLetter = document.querySelector('#letter-select');
 const listOfFriends = document.querySelector('#list-of-friends');
+const resultMessage = document.querySelector('.result');
 
 //create array of random letters and insert it in select
 const arr_en = [
@@ -40,7 +41,8 @@ for (let i = 0; i < 5; i += 1) {
 }
 
 const lettersToShowInSelect = [...arrOfRandomLetters].reduce(
-  (string, item) => string + `<option value="${item}">${item.toUpperCase()}</option>`,
+  (string, item) =>
+    string + `<option value="${item}">${item.toUpperCase()}</option>`,
   '',
 );
 
@@ -58,7 +60,7 @@ selectedByLetter.addEventListener('change', getFriends);
 function getFriends(e) {
   const letterToFind = getValue(e);
 
-  readTextFile('./list.json', function (text) {
+  readTextFile('./JS/list.json', function (text) {
     const data = JSON.parse(text);
     const friendsToShow = data.filter(
       friend => friend.name[0].toLowerCase() === letterToFind.toLowerCase(),
@@ -69,11 +71,20 @@ function getFriends(e) {
         (string, item) => string + `<li>${item.name}</li>`,
         '',
       );
+      resultMessage.innerHTML = 'Search results: ';
       listOfFriends.innerHTML = friends;
-      console.log(friends);
-    } else{
-      listOfFriends.innerHTML = '';
+      return;
     }
+
+    if (letterToFind === '') {
+      resultMessage.innerHTML =
+        'If you want to find friends just choose a letter';
+      listOfFriends.innerHTML = '';
+      return;
+    }
+    
+    resultMessage.innerHTML = 'No matches found. Try again.';
+    listOfFriends.innerHTML = '';
   });
 }
 
@@ -94,4 +105,3 @@ function getValue(e) {
   const value = e.target.value;
   return value;
 }
-
