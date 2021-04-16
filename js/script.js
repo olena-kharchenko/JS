@@ -60,7 +60,7 @@ selectedByLetter.addEventListener('change', getFriends);
 function getFriends(e) {
   const letterToFind = getValue(e);
 
-  readTextFile('./list.json', function (text) {
+  readTextFile('list.json', function (text) {
     const data = JSON.parse(text);
     const friendsToShow = data.filter(
       friend => friend.name[0].toLowerCase() === letterToFind.toLowerCase(),
